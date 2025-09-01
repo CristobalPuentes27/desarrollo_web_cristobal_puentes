@@ -4,41 +4,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const extraContactos = document.getElementById("extraContactos");
     const fechaEntrega = document.getElementById("fechaEntrega");
 
-    // Calcular fecha actual + 3 horas
+    // fecha actual + 3 horas
     const ahora = new Date();
     ahora.setHours(ahora.getHours() + 3);
 
-    // Formatear a "YYYY-MM-DDTHH:MM" para datetime-local
-    function toDatetimeLocal(date) {
-        const pad = (n) => n.toString().padStart(2, "0");
-        const yyyy = date.getFullYear();
-        const MM = pad(date.getMonth() + 1);
-        const dd = pad(date.getDate());
-        const hh = pad(date.getHours());
-        const mm = pad(date.getMinutes());
-        return `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
+    // Formatear a "YYYY-MM-DDTHH:MM" para datetime-local(no funciona)
+    function toDatetimeLocal(fecha) {
+        const year = fecha.getFullYear();
+        const month = String(fecha.getMonth() + 1).padStart(2, '0');
+        const day = String(fecha.getDate()).padStart(2, '0');
+        const hours = String(fecha.getHours()).padStart(2, '0');
+        const minutes = String(fecha.getMinutes()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
     const fechaMinima = toDatetimeLocal(ahora);
     fechaEntrega.value = fechaMinima;
     fechaEntrega.min = fechaMinima;
 
-    // ================= REDES SOCIALES  =================
+    // para las redes sociales
     contactarPor.addEventListener("change", () => {
         extraContactos.innerHTML = "";
         const checks = contactarPor.querySelectorAll("input[type='checkbox']");
         const seleccionadas = Array.from(contactarPor.querySelectorAll("input[type='checkbox']:checked"))
             .map(opt => opt.value);
-        
+
         const yaSelecionada = Array.from(checks).filter(chk => chk.checked);
 
         if (yaSelecionada.length >= 5) {
-            // Deshabilita los que no están seleccionados
             checks.forEach(chk => {
                 if (!chk.checked) chk.disabled = true;
             });
         } else {
-            // Reactiva todos si hay menos de 5 seleccionados
+
             checks.forEach(chk => chk.disabled = false);
         }
         seleccionadas.forEach(red => {
@@ -48,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const input = document.createElement("input");
             input.type = "text";
             input.name = `contacto_${red}`;
-            
+
 
             extraContactos.appendChild(label);
             extraContactos.appendChild(input);
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-    // ================= VALIDACIONES DEL FORMULARIO =================
+    // Validacion
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -76,17 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!emailRegex.test(email) || email.length > 100) {
             errores.push("El correo no es válido (máximo 100 caracteres).");
         }
-
-        // Teléfono (opcional, pero si lo llenan debe cumplir formato)
+        // Teléfono (opcional)
         const telefono = document.getElementById("telefono").value.trim();
         if (telefono !== "") {
-            const telRegex = /^\+\d{3}\.\d{8}$/; // ejemplo: +569.12345678
+            const telRegex = /^\+\d{3}\.\d{8}$/;
             if (!telRegex.test(telefono)) {
                 errores.push("El número de celular debe ser válido (+NNN.NNNNNNNN).");
             }
         }
 
-        // Redes sociales (si existen inputs creados)
+        // Redes sociales 
         const seleccionadas = Array.from(contactarPor.querySelectorAll("input[type='checkbox']:checked"))
             .map(opt => opt.value);
 
@@ -127,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
             errores.push("La fecha de entrega debe ser mayor o igual a la fecha mínima permitida.");
         }
 
-        // ================= RESULTADO =================
+        // Resultado
         if (errores.length > 0) {
             alert("Errores encontrados:\n\n" + errores.join("\n"));
         } else {
@@ -135,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         document.getElementById("btnSi").addEventListener("click", () => {
             alert("Hemos recibido la información de adopción, muchas gracias y suerte!");
-            window.location.href = "index.html"; 
+            window.location.href = "index.html";
         });
 
         document.getElementById("btnNo").addEventListener("click", () => {
