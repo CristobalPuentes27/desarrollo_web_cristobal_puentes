@@ -6,16 +6,23 @@ Entrega de la **tarea 1**
 
 # Formato
 
-'''
+
 > css (estilo de las paginas)
+
 > data (archivos extras)
+
 > html (las paginas web en si)
+
 > > adopcion.html (el formulario a llenar)
+
 > > estadisticas.html (los graficos)
+
 > > index.html (pagina principal)
+
 > > listado.html (listado de datos extras)
-> js (el codigo de javascript) 
-'''
+
+> js (el codigo de javascript)
+
 ## Aclaración
 
 - la mayoria de las fotos son extraidas de 'http.cat' y 'http.dog' excepto las del gato negro (kuro) que es mio y un perro que habian publicado la gente de MichisBeauchef
