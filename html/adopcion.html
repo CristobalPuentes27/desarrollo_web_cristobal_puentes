@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Agregar Aviso de Adopción</title>
+  
+  <link rel="icon" href="https://http.dog/202.jpg" type="image/x-icon">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/modal.css">
   <script src="../js/region_comuna.js" defer></script>
   <script src="../js/validation.js" defer></script>
+  <script src="../js/photos.js" defer></script>
 </head>
 <body>
   <h1>Agregar Aviso de Adopción</h1>
@@ -94,19 +98,23 @@
       <label for="descripcion">Descripción:</label><br>
       <textarea id="descripcion" name="descripcion" cols="50" rows="10" placeholder="Detalles adicionales..."></textarea>
       <br><br>
-
-    <label for="foto">Fotos (máx. 5):</label>
-    <div id="contenedorFotos">
+<label >Fotos (máx. 5):</label>
+  <div id="contenedorFotos">
     <input type="file" name="foto[]" accept="image/*">
-    </div>
-
-    <ul id="listaFotos"></ul>
-        
+    <button type="button" id="agregarFoto">Agregar otra foto</button>
+        </div>
         </fieldset>
     <br>
 
     <!-- ================= BOTÓN FINAL ================= -->
     <button type="submit" >Agregar este aviso de adopción</button>
   </form>
+  <div id="modalConfirmacion" class="modal">
+  <div class="modal-content">
+    <p>¿Está seguro que desea agregar este aviso de adopción?</p>
+    <button id="btnSi">Sí, estoy seguro</button>
+    <button id="btnNo">No, no estoy seguro, quiero volver al formulario</button>
+  </div>
+</div>
 </body>
 </html>

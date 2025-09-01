@@ -2,7 +2,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formAviso");
   const contactarPor = document.getElementById("contactarPor");
   const extraContactos = document.getElementById("extraContactos");
-  
+  const fechaEntrega = document.getElementById("fechaEntrega");
+
+  // Calcular fecha actual + 3 horas
+  const ahora = new Date();
+  ahora.setHours(ahora.getHours() + 3);
+
+  // Formatear a "YYYY-MM-DDTHH:MM" para datetime-local
+  function toDatetimeLocal(date) {
+    const pad = (n) => n.toString().padStart(2, "0");
+    const yyyy = date.getFullYear();
+    const MM = pad(date.getMonth() + 1);
+    const dd = pad(date.getDate());
+    const hh = pad(date.getHours());
+    const mm = pad(date.getMinutes());
+    return `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
+  }
+
+  const fechaMinima = toDatetimeLocal(ahora);
+
+  // Prellenar y fijar mínimo
+  fechaEntrega.value = fechaMinima;
+  fechaEntrega.min = fechaMinima;
   // ================= REDES SOCIALES DINÁMICAS =================
   contactarPor.addEventListener("change", () => {
   extraContactos.innerHTML = ""; 
@@ -24,11 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
     extraContactos.appendChild(document.createElement("br"));
     extraContactos.appendChild(document.createElement("br"));
   });
+  
 });
 
   // ================= VALIDACIONES DEL FORMULARIO =================
   form.addEventListener("submit", (e) => {
-    e.preventDefault(); // evitar envío real
+    e.preventDefault(); 
     
     let errores = [];
 
@@ -83,70 +105,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Fecha de entrega
-    const fechaEntrega = document.getElementById("fechaEntrega").value;
-    if (fechaEntrega === "") {
+
+    if (fechaEntrega.value === "") {
       errores.push("Debe ingresar una fecha de entrega.");
+    }else if (fechaEntrega.value < fechaEntrega.min) {
+      errores.push("La fecha de entrega debe ser mayor o igual a la fecha mínima permitida.");
     }
-
-    // Fotos
-   const contenedorFotos = document.getElementById("contenedorFotos");
-const listaFotos = document.getElementById("listaFotos");
-const MAX_FOTOS = 5;
-
-function actualizarListaFotos() {
-  listaFotos.innerHTML = "";
-  const inputs = contenedorFotos.querySelectorAll("input[type='file']");
-
-  inputs.forEach((input, idx) => {
-    if (input.files.length > 0) {
-      const li = document.createElement("li");
-      li.textContent = `Foto ${idx + 1}: ${input.files[0].name}`;
-      listaFotos.appendChild(li);
-    }
-  });
-}
-
-function agregarNuevoInputSiCorresponde(input) {
-  const inputs = contenedorFotos.querySelectorAll("input[type='file']");
-  const total = inputs.length;
-
-  // Si este input tiene archivo y aún no hemos llegado al máximo
-  if (input.files.length > 0 && total < MAX_FOTOS) {
-    const nuevoInput = document.createElement("input");
-    nuevoInput.type = "file";
-    nuevoInput.name = "foto[]";
-    nuevoInput.accept = "image/*";
-
-    // cada vez que cambie, actualiza lista y revisa si hay que crear otro input
-    nuevoInput.addEventListener("change", (e) => {
-      actualizarListaFotos();
-      agregarNuevoInputSiCorresponde(e.target);
-    });
-
-    contenedorFotos.appendChild(document.createElement("br"));
-    contenedorFotos.appendChild(nuevoInput);
-  }
-}
-
-// enganchar el primer input
-const primerInput = contenedorFotos.querySelector("input[type='file']");
-primerInput.addEventListener("change", (e) => {
-  actualizarListaFotos();
-  agregarNuevoInputSiCorresponde(e.target);
-});
-    actualizarListaFotos();
-
-    const totalFotos = contenedorFotos.querySelectorAll("input[type='file']").length;
-
-
+    
     // ================= RESULTADO =================
     if (errores.length > 0) {
       alert("Errores encontrados:\n\n" + errores.join("\n"));
     } else {
-      if (confirm("¿Está seguro que desea agregar este aviso de adopción?")) {
-        alert("Hemos recibido la información de adopción, muchas gracias y suerte!");
-        window.location.href = "index.html"; // volver a portada
-      }
+       document.getElementById("modalConfirmacion").style.display = "block";
     }
-  });
+    document.getElementById("btnSi").addEventListener("click", () => {
+  alert("Hemos recibido la información de adopción, muchas gracias y suerte!");
+  window.location.href = "index.html"; // volver a portada
+});
+
+document.getElementById("btnNo").addEventListener("click", () => {
+  document.getElementById("modalConfirmacion").style.display = "none";
+});
+    });
+  
 });
