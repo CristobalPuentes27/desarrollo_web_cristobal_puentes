@@ -8,12 +8,19 @@ Entrega de la **tarea 1**
 
 '''
 > css (estilo de las paginas)
+
 > data (archivos extras)
+
 > html (las paginas web en si)
+
 > > adopcion.html (el formulario a llenar)
+
 > > estadisticas.html (los graficos)
+
 > > index.html (pagina principal)
+
 > > listado.html (listado de datos extras)
+
 > js (el codigo de javascript) 
 '''
 ## Aclaración
