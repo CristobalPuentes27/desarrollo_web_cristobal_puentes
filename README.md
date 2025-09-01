@@ -22,4 +22,5 @@ Entrega de la **tarea 1**
 
 - Para el css provee con un par de paletas sencillas y luego le pedi a una IA que fuera creando para distintos componentes (ejemplo de prompt: tengo este style.css quiero unos botones y unas tablas que tengan una paleta similar)
 - la expreción regular del email la saque de stack overflow
+- en el listado de mascotas las imagenes se cortan en los bordes para poder cumplir con los requisitos
 - parte del codigo fue revisado por IA, en particular la parte del pop-up al confirmar el formulario
