@@ -1,69 +1,69 @@
 // Diccionario de actividades
 const actividades = [
-  {
-    Publicacion: "2025-08-18 12:00",
-    Entrega: "2025-08-20 10:00",
-    Comuna: "Puerto Montt",
-    Sector: "Centro",
-    Cantidad: 1,
-    Tipo: "Gato",
-    Edad: "1 año",
-    Contacto: "Ana Torres",
-    Fotos: ["https://http.cat/images/102.jpg"]
-  },
-  {
-    Publicacion: "2025-08-17 19:00",
-    Entrega: "2025-08-21 14:00",
-    Comuna: "Ñuñoa",
-    Sector: "Plaza Ñuñoa",
-    Cantidad: 1,
-    Tipo: "Perro",
-    Edad: "2 años",
-    Contacto: "Carlos Pérez",
-    Fotos: ["https://http.dog/414.jpg"]
-  },
     {
-    Publicacion: "2025-08-16 09:30",
-    Entrega: "2025-08-22 16:00",
-    Comuna: "Puente Alto",  
-    Sector: "Los Aromos",
-    Cantidad: 1,
-    Tipo: "Gato",
-    Edad: "1 año",
-    Contacto: "Cristobal Puentes",
-    Fotos: ["../data/kuro1.jpg", "../data/kuro2.jpg", "../data/kuro3.jpg"]
+        Publicacion: "2025-08-18 12:00",
+        Entrega: "2025-08-20 10:00",
+        Comuna: "Puerto Montt",
+        Sector: "Centro",
+        Cantidad: 1,
+        Tipo: "Gato",
+        Edad: "1 año",
+        Contacto: "Ana Torres",
+        Fotos: ["https://http.cat/images/102.jpg"]
     },
     {
-    Publicacion: "2025-08-15 11:15",
-    Entrega: "2025-08-23 09:00",    
-    Comuna: "La Florida",
-    Sector: "Vicuña Mackenna",
-    Cantidad: 5,
-    Tipo: "Gatos",
-    Edad: "3 meses",
-    Contacto: "María González",
-    Fotos: ["https://images.pexels.com/photos/45170/kittens-cat-cat-puppy-rush-45170.jpeg?auto=compress&cs=tinysrgb&w=600"]
+        Publicacion: "2025-08-17 19:00",
+        Entrega: "2025-08-21 14:00",
+        Comuna: "Ñuñoa",
+        Sector: "Plaza Ñuñoa",
+        Cantidad: 1,
+        Tipo: "Perro",
+        Edad: "2 años",
+        Contacto: "Carlos Pérez",
+        Fotos: ["https://http.dog/414.jpg"]
     },
     {
-    Publicacion: "2025-08-14 14:45",
-    Entrega: "2025-08-24 12:00",
-    Comuna: "santiago",
-    Sector: "Beauchef 851",
-    Cantidad: 1,
-    Tipo: "Perros",
-    Edad: "10 meses",
-    Contacto: "Michis Beauchef",
-    Fotos: ["../data/michisbeauchef1.jpg", "../data/michisbeauchef2.jpg", "../data/michisbeauchef3.jpg", "../data/michisbeauchef4.jpg", "../data/michisbeauchef5.jpg"]
+        Publicacion: "2025-08-16 09:30",
+        Entrega: "2025-08-22 16:00",
+        Comuna: "Puente Alto",
+        Sector: "Los Aromos",
+        Cantidad: 1,
+        Tipo: "Gato",
+        Edad: "1 año",
+        Contacto: "Cristobal Puentes",
+        Fotos: ["../data/kuro1.jpg", "../data/kuro2.jpg", "../data/kuro3.jpg"]
+    },
+    {
+        Publicacion: "2025-08-15 11:15",
+        Entrega: "2025-08-23 09:00",
+        Comuna: "La Florida",
+        Sector: "Vicuña Mackenna",
+        Cantidad: 5,
+        Tipo: "Gatos",
+        Edad: "3 meses",
+        Contacto: "María González",
+        Fotos: ["https://images.pexels.com/photos/45170/kittens-cat-cat-puppy-rush-45170.jpeg?auto=compress&cs=tinysrgb&w=600"]
+    },
+    {
+        Publicacion: "2025-08-14 14:45",
+        Entrega: "2025-08-24 12:00",
+        Comuna: "santiago",
+        Sector: "Beauchef 851",
+        Cantidad: 1,
+        Tipo: "Perros",
+        Edad: "10 meses",
+        Contacto: "Michis Beauchef",
+        Fotos: ["../data/michisbeauchef1.jpg", "../data/michisbeauchef2.jpg", "../data/michisbeauchef3.jpg", "../data/michisbeauchef4.jpg", "../data/michisbeauchef5.jpg"]
     }
 
 ];
 
 // Render tabla resumida
 function renderTabla() {
-  const container = document.getElementById("tabla-container");
-  container.innerHTML = ""; // limpiar
+    const container = document.getElementById("tabla-container");
+    container.innerHTML = ""; // limpiar
 
-  let html = `<table border="1" cellspacing="0" cellpadding="6">
+    let html = `<table border="1" cellspacing="0" cellpadding="6">
     <thead>
       <tr>
         <th>Fecha Publicación</th>
@@ -78,8 +78,8 @@ function renderTabla() {
     </thead>
     <tbody>`;
 
-  actividades.forEach((act, index) => {
-    html += `
+    actividades.forEach((act, index) => {
+        html += `
       <tr onclick="mostrarDetalle(${index})" style="cursor:pointer;">
         <td>${act.Publicacion}</td>
         <td>${act.Entrega}</td>
@@ -90,21 +90,21 @@ function renderTabla() {
         <td>${act.Contacto}</td>
         <td>${act.Fotos.length}</td>
       </tr>`;
-  });
+    });
 
-  html += `</tbody></table>`;
-  container.innerHTML = html;
+    html += `</tbody></table>`;
+    container.innerHTML = html;
 
-  document.getElementById("tabla-container").style.display = "block";
-  document.getElementById("detalle-container").style.display = "none";
+    document.getElementById("tabla-container").style.display = "block";
+    document.getElementById("detalle-container").style.display = "none";
 }
 
 // Mostrar detalle de un aviso
 function mostrarDetalle(index) {
-  const act = actividades[index];
-  const detalle = document.getElementById("detalle-container");
+    const act = actividades[index];
+    const detalle = document.getElementById("detalle-container");
 
-  let html = `
+    let html = `
     <h2>Detalle Aviso</h2>
     <p><strong>Fecha Publicación:</strong> ${act.Publicacion}</p>
     <p><strong>Fecha Entrega:</strong> ${act.Entrega}</p>
@@ -118,33 +118,33 @@ function mostrarDetalle(index) {
 
     <div class="fotos">`;
 
-  act.Fotos.forEach(f => {
-    html += `<img src="${f}" alt="foto mascota" width="320" height="240" onclick="abrirModal('${f}')">`;
-  });
+    act.Fotos.forEach(f => {
+        html += `<img src="${f}" alt="foto mascota" width="320" height="240" onclick="abrirModal('${f}')">`;
+    });
 
-  html += `</div>
+    html += `</div>
     <br>
     <button onclick="renderTabla()">Volver al listado</button>
     <button href="index.html">Volver a la portada</button>
   `;
 
-  detalle.innerHTML = html;
+    detalle.innerHTML = html;
 
-  document.getElementById("tabla-container").style.display = "none";
-  document.getElementById("detalle-container").style.display = "block";
+    document.getElementById("tabla-container").style.display = "none";
+    document.getElementById("detalle-container").style.display = "block";
 }
 
 // Modal de fotos
 function abrirModal(src) {
-  document.getElementById("imagenModal").src = src;
-  document.getElementById("modal").style.display = "flex";
+    document.getElementById("imagenModal").src = src;
+    document.getElementById("modal").style.display = "flex";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderTabla();
+    renderTabla();
 
-  // ahora sí, después que DOM existe
-  document.getElementById("cerrarModal").addEventListener("click", () => {
-    document.getElementById("modal").style.display = "none";
-  });
+    // ahora sí, después que DOM existe
+    document.getElementById("cerrarModal").addEventListener("click", () => {
+        document.getElementById("modal").style.display = "none";
+    });
 });
