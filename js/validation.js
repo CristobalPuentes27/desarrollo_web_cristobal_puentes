@@ -20,16 +20,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const fechaMinima = toDatetimeLocal(ahora);
-
-    // Prellenar y fijar mínimo
     fechaEntrega.value = fechaMinima;
     fechaEntrega.min = fechaMinima;
-    // ================= REDES SOCIALES DINÁMICAS =================
+
+    // ================= REDES SOCIALES  =================
     contactarPor.addEventListener("change", () => {
         extraContactos.innerHTML = "";
+        const checks = contactarPor.querySelectorAll("input[type='checkbox']");
         const seleccionadas = Array.from(contactarPor.querySelectorAll("input[type='checkbox']:checked"))
             .map(opt => opt.value);
+        
+        const yaSelecionada = Array.from(checks).filter(chk => chk.checked);
 
+        if (yaSelecionada.length >= 5) {
+            // Deshabilita los que no están seleccionados
+            checks.forEach(chk => {
+                if (!chk.checked) chk.disabled = true;
+            });
+        } else {
+            // Reactiva todos si hay menos de 5 seleccionados
+            checks.forEach(chk => chk.disabled = false);
+        }
         seleccionadas.forEach(red => {
             const label = document.createElement("label");
             label.textContent = `ID o URL de ${red}: `;
@@ -37,8 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const input = document.createElement("input");
             input.type = "text";
             input.name = `contacto_${red}`;
-            input.minLength = 4;
-            input.maxLength = 50;
+            
 
             extraContactos.appendChild(label);
             extraContactos.appendChild(input);
@@ -62,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Email
         const email = document.getElementById("email").value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
         if (!emailRegex.test(email) || email.length > 100) {
             errores.push("El correo no es válido (máximo 100 caracteres).");
         }
@@ -70,21 +80,26 @@ document.addEventListener("DOMContentLoaded", () => {
         // Teléfono (opcional, pero si lo llenan debe cumplir formato)
         const telefono = document.getElementById("telefono").value.trim();
         if (telefono !== "") {
-            const telRegex = /^\+\d{3}\.\d{8,12}$/; // ejemplo: +569.12345678
+            const telRegex = /^\+\d{3}\.\d{8}$/; // ejemplo: +569.12345678
             if (!telRegex.test(telefono)) {
                 errores.push("El número de celular debe ser válido (+NNN.NNNNNNNN).");
             }
         }
 
         // Redes sociales (si existen inputs creados)
-        const redesInputs = extraContactos.querySelectorAll("input[type='text']");
-        redesInputs.forEach(input => {
-            if (input.value.trim().length > 0 &&
-                (input.value.length < 4 || input.value.length > 50)) {
-                errores.push(`El campo ${input.name} debe tener entre 4 y 50 caracteres.`);
-            }
-        });
+        const seleccionadas = Array.from(contactarPor.querySelectorAll("input[type='checkbox']:checked"))
+            .map(opt => opt.value);
 
+        if (seleccionadas.length > 0) {
+            seleccionadas.forEach(red => {
+                const input = form.querySelector(`input[name="contacto_${red}"]`);
+                if (!input || input.value.trim() === "") {
+                    errores.push(`Debe ingresar un ID o URL válido para ${red}.`);
+                } else if (input.value.length < 4 || input.value.length > 50) {
+                    errores.push(`El contacto de ${red} debe tener entre 4 y 50 caracteres.`);
+                }
+            });
+        }
         // Tipo de mascota
         const tipo = document.getElementById("tipo").value;
         if (tipo === "") {
@@ -120,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         document.getElementById("btnSi").addEventListener("click", () => {
             alert("Hemos recibido la información de adopción, muchas gracias y suerte!");
-            window.location.href = "index.html"; // volver a portada
+            window.location.href = "index.html"; 
         });
 
         document.getElementById("btnNo").addEventListener("click", () => {

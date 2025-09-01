@@ -67,7 +67,7 @@ let region_comuna = {
     ]
 };
 
-const poblarRegion = () => {
+const ComunaRegion = () => {
     const regionSelect = document.getElementById("select-region");
 
 
@@ -84,22 +84,22 @@ const updateComunas = () => {
     const comunaSelect = document.getElementById("select-comuna");
     const selectedRegion = regionSelect.value;
 
-    comunaSelect.innerHTML = '<option value="">Seleccione una comuna</option>'; // Restablece el select de comunas
-    if (!selectedRegion) return; // Si no hay región seleccionada, salir
+    comunaSelect.innerHTML = '<option value="">Seleccione una comuna</option>';
+    if (!selectedRegion) return; 
     const region = region_comuna.regiones.find(region => region.numero == selectedRegion);
 
     if (region) {
         region.comunas.forEach(comuna => {
             const option = document.createElement("option");
-            option.value = comuna.id; // Usa el ID de la comuna como valor
-            option.textContent = comuna.nombre; // Usa el nombre de la comuna
+            option.value = comuna.id; 
+            option.textContent = comuna.nombre; 
             comunaSelect.appendChild(option);
         });
     }
 };
 
 window.onload = () => {
-    poblarRegion();
+    ComunaRegion();
 };
 
 document.getElementById("select-region").addEventListener("change", updateComunas);

@@ -58,10 +58,9 @@ const actividades = [
 
 ];
 
-// Render tabla resumida
 function renderTabla() {
     const container = document.getElementById("tabla-container");
-    container.innerHTML = ""; // limpiar
+    container.innerHTML = "";
 
     let html = `<table border="1" cellspacing="0" cellpadding="6">
     <thead>
@@ -125,7 +124,7 @@ function mostrarDetalle(index) {
     html += `</div>
     <br>
     <button onclick="renderTabla()">Volver al listado</button>
-    <button href="index.html">Volver a la portada</button>
+    <a href="index.html" class= "fakebutton">Volver a la portada</a>
   `;
 
     detalle.innerHTML = html;
