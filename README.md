@@ -9,13 +9,13 @@ Primero borrar /myenv y cualquier carpeta pycache
 Correr todas las queries de tarea2.sql luego las de region-comuna.sql
 Correr
 
-    `pip install -r requirements.txt`
+    pip install -r requirements.txt
     
-    `python \database\db.py`
+    python \database\db.py
 
 finalmente ejecutar app.py y hacer     
     
-    `flask run `
+    flask run 
 
 esto abrira la pagina mostrando el lobby de la web (el template index.html)
 
