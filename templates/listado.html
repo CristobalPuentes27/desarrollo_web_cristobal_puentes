@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Avisos de Adopción</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Listado de Avisos de Adopción</h1>
+
+    <div id="tabla-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha Publicación</th>
+                    <th>Fecha Entrega</th>
+                    <th>Comuna</th>
+                    <th>Cantidad</th>
+                    <th>Tipo</th>
+                    <th>Edad</th>
+                    <th>Contacto</th>
+                    <th>Total Fotos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if avisos %}
+                    {% for aviso in avisos %}
+                    <tr onclick="window.location.href='{{ url_for('detalle', aviso_id=aviso.id) }}'" style="cursor:pointer;">
+                        <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ aviso.fecha_entrega.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ aviso.comuna.nombre }}</td>
+                        <td>{{ aviso.cantidad }}</td>
+                        <td>{{ aviso.tipo }}</td>
+                        <td>{{ aviso.edad }} {{ aviso.unidad_medida }}</td>
+                        <td>{{ aviso.email }}</td>
+                        <td>{{ aviso.fotos|length }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8">No hay avisos disponibles</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div style="margin-top: 20px; text-align: center;">
+        {% if page > 1 %}
+            <a href="{{ url_for('listado', page=page-1) }}">
+                <button>Anterior</button>
+            </a>
+        {% endif %}
+
+        <span>Página {{ page }} de {{ (total // per_page) + (1 if total % per_page else 0) }}</span>
+
+        {% if (page * per_page) < total %}
+            <a href="{{ url_for('listado', page=page+1) }}">
+                <button>Siguiente</button>
+            </a>
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="{{ url_for('index') }}">
+            <button>Volver a la portada</button>
+        </a>
+    </div>
+</body>
+</html>

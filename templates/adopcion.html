@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Aviso de Adopción</title>
+
+    <link rel="icon" href="https://http.dog/202.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='modal.css') }}">
+<script src="{{ url_for('static', filename='region_comuna.js') }}" defer></script>
+<script src="{{ url_for('static', filename='validation.js') }}" defer></script>
+<script src="{{ url_for('static', filename='photos.js') }}" defer></script>
+</head>
+
+<body>
+    <h1>Agregar Aviso de Adopción</h1>
+
+    <form id="formAviso" method="POST" action="{{ url_for('crear_aviso') }}" enctype="multipart/form-data">
+        <!-- lugar-->
+        <fieldset>
+            <legend>¿Dónde?</legend>
+
+            <label for="select-region">Región</label>
+            <select name="select-region" id="select-region" required>
+    <option value="">Seleccione una región</option>
+</select>
+            <br><br>
+
+            <label for="select-comuna">Comuna</label>
+            <select name="select-comuna" id="select-comuna" required>
+    <option value="">Seleccione una comuna</option>
+</select>
+            <br><br>
+
+            <label for="sector">Sector:</label>
+            <input type="text" id="sector" name="sector" maxlength="100" placeholder="Ej: Beauchef 850, terraza">
+        </fieldset>
+        <br>
+
+        <!-- contacto--> 
+        <fieldset>
+            <legend>¿Contacto de esta publicación?</legend>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" maxlength="200" required>
+            <br><br>
+
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" maxlength="100" placeholder="ejemplo@correo.com" required>
+            <br><br>
+
+            <label for="telefono">Número de celular:</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="+569.12345678">
+            <br><br>
+
+            <p>Contactar por:</p>
+            <div id="contactarPor" class="checkbox-group">
+    <label><input type="checkbox" name="contactarPor" value="whatsapp"> Whatsapp</label><br>
+    <label><input type="checkbox" name="contactarPor" value="telegram"> Telegram</label><br>
+    <label><input type="checkbox" name="contactarPor" value="X"> X (Twitter)</label><br>
+    <label><input type="checkbox" name="contactarPor" value="instagram"> Instagram</label><br>
+    <label><input type="checkbox" name="contactarPor" value="tiktok"> TikTok</label><br>
+    <label><input type="checkbox" name="contactarPor" value="otra"> Otros (link)</label><br>
+</div>
+
+            <div id="extraContactos"></div>
+        </fieldset>
+        <br>
+
+        <!-- mascota-->
+        <fieldset>
+            <legend>¿Qué mascota ofrece en adopción?</legend>
+
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="">Seleccione</option>
+                <option value="gato">Gato</option>
+                <option value="perro">Perro</option>
+            </select>
+            <br><br>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" min="1" step="1" required>
+            <br><br>
+
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad" min="1" step="1" required>
+            <select id="unidadEdad" name="unidadEdad" required>
+                <option value="">Seleccione</option>
+                <option value="a">Años</option>
+<option value="m">Meses</option>
+            </select>
+            <br><br>
+
+            <label for="fechaEntrega">Fecha disponible para entrega:</label>
+            <input type="datetime-local" id="fechaEntrega" name="fechaEntrega" required>
+            <br><br>
+
+            <label for="descripcion">Descripción:</label><br>
+            <textarea id="descripcion" name="descripcion" cols="50" rows="10"
+                placeholder="Detalles adicionales..."></textarea>
+            <br><br>
+            <label>Fotos (máx. 5):</label>
+            <div id="contenedorFotos">
+                <input type="file" name="foto[]" accept="image/*">
+                <button type="button" id="agregarFoto">Agregar otra foto</button>
+            </div>
+        </fieldset>
+        <br>
+
+        
+        <button type="submit">Agregar este aviso de adopción</button>
+    </form>
+    <!-- aceptar -->
+    <div id="modalConfirmacion" class="modal">
+        <div class="modal-content">
+            <p>¿Está seguro que desea agregar este aviso de adopción?</p>
+            <button id="btnSi">Sí, estoy seguro</button>
+            <button id="btnNo">No, no estoy seguro, quiero volver al formulario</button>
+        </div>
+    </div>
+</body>
+
+</html>
