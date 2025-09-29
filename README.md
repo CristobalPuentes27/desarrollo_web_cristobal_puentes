@@ -1,32 +1,43 @@
 # Desarrollo de Aplicaciones Web
 
-Entrega de la **tarea 1**
+Entrega de la **tarea 2**
 
-- La pagina principal es 'index.html'
+# Uso
+
+Primero borrar /myenv y cualquier carpeta pycache
+
+Correr todas las queries de tarea2.sql luego las de region-comuna.sql
+Correr
+
+    `pip install -r requirements.txt`
+    
+    `python \database\db.py`
+
+finalmente ejecutar app.py y hacer     
+    
+    `flask run `
+
+esto abrira la pagina mostrando el lobby de la web (el template index.html)
 
 # Formato
 
 
-> css (estilo de las paginas)
+> database (archivos relacionados a la base de datos)
 
-> data (archivos extras)
+> myenv (hay que borrarlo)
 
-> html (las paginas web en si)
+> static 
 
-> > adopcion.html (el formulario a llenar)
+> > graphs (fotos de los graficos)
 
-> > estadisticas.html (los graficos)
+> > uploads (donde se guardan las fotos)
 
-> > index.html (pagina principal)
+> > archivos css 
 
-> > listado.html (listado de datos extras)
+> > fotos del sistema
 
-> js (el codigo de javascript)
+> > archivo js
 
-## Aclaración
+> templates (archivos modificados de los html originales)
 
-- la mayoria de las fotos son extraidas de 'http.cat' y 'http.dog' excepto las del gato negro (kuro) que es mio y un perro que habian publicado la gente de MichisBeauchef
-- Para el css provee con un par de paletas sencillas y luego le pedi a una IA que fuera creando para distintos componentes (ejemplo de prompt: tengo este style.css quiero unos botones y unas tablas que tengan una paleta similar)
-- la expreción regular del email la saque de stack overflow
-- en el listado de mascotas las imagenes se cortan en los bordes para poder cumplir con los requisitos
-- parte del codigo fue revisado por IA, en particular la parte del pop-up al confirmar el formulario
+

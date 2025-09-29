@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Listado de Avisos de Adopción</title>
@@ -7,10 +8,11 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
     <div class="header">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
-</div>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
+    </div>
     <h1>Listado de Avisos de Adopción</h1>
 
     <div id="tabla-container">
@@ -29,22 +31,23 @@
             </thead>
             <tbody>
                 {% if avisos %}
-                    {% for aviso in avisos %}
-                    <tr onclick="window.location.href='{{ url_for('detalle', aviso_id=aviso.id) }}'" style="cursor:pointer;">
-                        <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d %H:%M') }}</td>
-                        <td>{{ aviso.fecha_entrega.strftime('%Y-%m-%d %H:%M') }}</td>
-                        <td>{{ aviso.comuna.nombre }}</td>
-                        <td>{{ aviso.cantidad }}</td>
-                        <td>{{ aviso.tipo }}</td>
-                        <td>{{ aviso.edad_txt }}</td>
-                        <td>{{ aviso.email }}</td>
-                        <td>{{ aviso.fotos|length }}</td>
-                    </tr>
-                    {% endfor %}
+                {% for aviso in avisos %}
+                <tr onclick="window.location.href='{{ url_for('detalle', aviso_id=aviso.id) }}'"
+                    style="cursor:pointer;">
+                    <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ aviso.fecha_entrega.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ aviso.comuna.nombre }}</td>
+                    <td>{{ aviso.cantidad }}</td>
+                    <td>{{ aviso.tipo }}</td>
+                    <td>{{ aviso.edad_txt }}</td>
+                    <td>{{ aviso.email }}</td>
+                    <td>{{ aviso.fotos|length }}</td>
+                </tr>
+                {% endfor %}
                 {% else %}
-                    <tr>
-                        <td colspan="8">No hay avisos disponibles</td>
-                    </tr>
+                <tr>
+                    <td colspan="8">No hay avisos disponibles</td>
+                </tr>
                 {% endif %}
             </tbody>
         </table>
@@ -53,24 +56,22 @@
     <!-- Paginación -->
     <div class="pagination">
         {% if page > 1 %}
-            <a href="{{ url_for('listado', page=page-1) }}">
-                <button class="btn-page">⬅</button>
-            </a>
+        <a href="{{ url_for('listado', page=page-1) }}" class="btn btn-page">⬅
+        </a>
         {% endif %}
 
         <span>Página {{ page }} de {{ (total // per_page) + (1 if total % per_page else 0) }}</span>
 
-        {% if (page * per_page) < total %}
-            <a href="{{ url_for('listado', page=page+1) }}">
-                <button class="btn-page">➡</button>
+        {% if (page * per_page) < total %} <a href="{{ url_for('listado', page=page+1) }}" class=" btn btn-page">➡
             </a>
-        {% endif %}
+            {% endif %}
     </div>
 
     <div style="margin-top: 20px; text-align: center;">
-        <a href="{{ url_for('index') }}">
-            <button>Volver a la portada</button>
+        <a href="{{ url_for('index') }}" class="btn">
+            Volver a la portada
         </a>
     </div>
 </body>
+
 </html>

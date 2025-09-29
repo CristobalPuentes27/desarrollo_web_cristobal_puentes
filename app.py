@@ -6,12 +6,10 @@ from werkzeug.utils import secure_filename
 import hashlib
 import filetype
 import os
-from markupsafe import escape
 import uuid
 import re
 app = Flask(__name__)
 
-# Configura conexión a MySQL (ajusta usuario, clave y base)
 db_config = {
     'host': 'localhost',
     'user': 'cc5002',
@@ -168,12 +166,12 @@ def crear_aviso():
                     if not allowed_file(f.filename):
                         errores.append(f"El archivo {f.filename} no tiene un formato permitido.")
 
-            # **IMPORTANTE: Si hay errores, retornar al formulario**
+            
             if errores:
                 session.close()
                 return render_template("adopcion.html", errores=errores)
 
-            # --- Guardado si todo es válido ---
+            
             aviso = AvisoAdopcion(
                 fecha_ingreso=datetime.now(),
                 comuna_id=int(request.form["select-comuna"]),
@@ -229,5 +227,4 @@ def crear_aviso():
 def estadisticas():
 
     return render_template("estadisticas.html")
-if __name__ == '__main__':
-    app.run(debug=True)
+
