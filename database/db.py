@@ -61,7 +61,13 @@ class AvisoAdopcion(Base):
     comuna = relationship("Comuna", back_populates="avisos")
     fotos = relationship("Foto", back_populates="aviso", cascade="all, delete-orphan")
     contactos = relationship("ContactarPor", back_populates="aviso", cascade="all, delete-orphan")
-
+    @property
+    def edad_txt(self):
+        if self.unidad_medida == "a":
+            return f"{self.edad} años"
+        elif self.unidad_medida == "m":
+            return f"{self.edad} meses"
+        return str(self.edad)
 
 class Foto(Base):
     __tablename__ = "foto"

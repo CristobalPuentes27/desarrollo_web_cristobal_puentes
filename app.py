@@ -8,6 +8,7 @@ import filetype
 import os
 from markupsafe import escape
 import uuid
+import re
 app = Flask(__name__)
 
 # Configura conexión a MySQL (ajusta usuario, clave y base)
@@ -70,14 +71,14 @@ def index():
 def listado():
     session = SessionLocal()
     page = int(request.args.get("page", 1))
-    per_page = 10
+    per_page = 5
 
     avisos = (
         session.query(AvisoAdopcion)
         .options(
             joinedload(AvisoAdopcion.comuna),
-            joinedload(AvisoAdopcion.fotos),       # 👈 cargamos fotos
-            joinedload(AvisoAdopcion.contactos)    # 👈 y contactos, si los muestras
+            joinedload(AvisoAdopcion.fotos),       
+            joinedload(AvisoAdopcion.contactos)   
         )
         .order_by(AvisoAdopcion.fecha_ingreso.desc())
         .offset((page - 1) * per_page)
@@ -118,59 +119,110 @@ def crear_aviso():
 
     if request.method == "POST":
         try:
-            # Datos principales
+            errores = []
+
+            # --- Validaciones de campos ---
+            nombre = request.form.get("nombre", "").strip()
+            if not (3 <= len(nombre) <= 200):
+                errores.append("El nombre debe tener entre 3 y 200 caracteres.")
+
+            email = request.form.get("email", "").strip()
+            if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email) or len(email) > 100:
+                errores.append("El correo no es válido o supera los 100 caracteres.")
+
+            telefono = request.form.get("telefono", "").strip()
+            if telefono and not re.match(r"^\+\d{3}\.\d{8}$", telefono):
+                errores.append("El número debe tener formato +NNN.NNNNNNNN")
+
+            cantidad = request.form.get("cantidad", "")
+            if not cantidad.isdigit() or int(cantidad) < 1:
+                errores.append("La cantidad debe ser un número entero mayor a 0.")
+
+            edad = request.form.get("edad", "")
+            if not edad.isdigit() or int(edad) < 1:
+                errores.append("La edad debe ser un número entero mayor a 0.")
+
+            unidad = request.form.get("unidadEdad")
+            if unidad not in ["a", "m"]:
+                errores.append("La unidad de edad debe ser 'a' (años) o 'm' (meses).")
+
+            # Fecha
+            fecha_entrega = None
+            try:
+                fecha_entrega = datetime.fromisoformat(request.form["fechaEntrega"])
+                if fecha_entrega <= datetime.now():
+                    errores.append("La fecha de entrega debe ser mayor a la actual.")
+            except Exception:
+                errores.append("Formato inválido en la fecha de entrega.")
+
+            # ContactarPor
+            for red in request.form.getlist("contactarPor"):
+                identificador = request.form.get(f"contacto_{red}", "").strip()
+                if not (4 <= len(identificador) <= 50):
+                    errores.append(f"El contacto de {red} debe tener entre 4 y 50 caracteres.")
+
+            # Fotos
+            fotos = request.files.getlist("foto[]")
+            for f in fotos:
+                if f and f.filename:
+                    if not allowed_file(f.filename):
+                        errores.append(f"El archivo {f.filename} no tiene un formato permitido.")
+
+            # **IMPORTANTE: Si hay errores, retornar al formulario**
+            if errores:
+                session.close()
+                return render_template("adopcion.html", errores=errores)
+
+            # --- Guardado si todo es válido ---
             aviso = AvisoAdopcion(
                 fecha_ingreso=datetime.now(),
                 comuna_id=int(request.form["select-comuna"]),
                 sector=request.form.get("sector"),
-                nombre=request.form["nombre"],
-                email=request.form["email"],
-                celular=request.form.get("telefono"),
+                nombre=nombre,
+                email=email,
+                celular=telefono if telefono else None,
                 tipo=request.form["tipo"],
-                cantidad=int(request.form["cantidad"]),
-                edad=int(request.form["edad"]),
-                unidad_medida=request.form["unidadEdad"],
-                fecha_entrega=datetime.fromisoformat(request.form["fechaEntrega"]),
-                descripcion=request.form.get("descripcion")
+                cantidad=int(cantidad),
+                edad=int(edad),
+                unidad_medida=unidad,
+                fecha_entrega=fecha_entrega,
+                descripcion=request.form.get("descripcion"),
             )
             session.add(aviso)
             session.commit()
 
-            # Redes sociales seleccionadas
-            for red in request.form.getlist("contactarPor"):  # 👈 ahora sí llegan
+            # Guardar contactos
+            for red in request.form.getlist("contactarPor"):
                 identificador = request.form.get(f"contacto_{red}", "").strip()
-                if identificador:
-                    contacto = ContactarPor(
-                        nombre=red,
-                        identificador=identificador,
-                        aviso_id=aviso.id
-                    )
-                    session.add(contacto)
-            # Fotos
-            fotos = request.files.getlist("foto[]")
+                contacto = ContactarPor(nombre=red, identificador=identificador, aviso_id=aviso.id)
+                session.add(contacto)
+            
+            # Guardar fotos
             for f in fotos:
                 if f and f.filename and allowed_file(f.filename):
                     orig_filename = secure_filename(f.filename)
-                    filename = f"{uuid.uuid4().hex}_{orig_filename}"  # ej: "8f3e2c7a_gatito.jpg"
+                    filename = f"{uuid.uuid4().hex}_{orig_filename}"
 
-                    # Ruta donde se guardará el archivo
                     ruta = os.path.join(app.config["UPLOAD_FOLDER"], filename).replace("\\", "/")
                     f.save(ruta)
 
-                    # Guardamos solo la ruta **relativa a static**
                     foto = Foto(
-                        ruta_archivo=f"uploads/{filename}",  # esto va a la DB
-                        nombre_archivo=orig_filename,        # nombre original
+                        ruta_archivo=f"uploads/{filename}",
+                        nombre_archivo=orig_filename,
                         aviso_id=aviso.id
                     )
                     session.add(foto)
 
             session.commit()
-            return redirect(url_for("listado"))
+            session.close()
+            return redirect(url_for("index"))
 
         except Exception as e:
             session.rollback()
+            session.close()
             print("Error al guardar:", e)
+            return render_template("adopcion.html", errores=[f"Error al guardar: {str(e)}"])
+    
     session.close()
     return render_template("adopcion.html")
 @app.route("/estadisticas")

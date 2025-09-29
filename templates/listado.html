@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Listado de Avisos de Adopción</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="header">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
+</div>
     <h1>Listado de Avisos de Adopción</h1>
 
     <div id="tabla-container">
-        <table>
+        <table class="table-large">
             <thead>
                 <tr>
                     <th>Fecha Publicación</th>
@@ -31,7 +36,7 @@
                         <td>{{ aviso.comuna.nombre }}</td>
                         <td>{{ aviso.cantidad }}</td>
                         <td>{{ aviso.tipo }}</td>
-                        <td>{{ aviso.edad }} {{ aviso.unidad_medida }}</td>
+                        <td>{{ aviso.edad_txt }}</td>
                         <td>{{ aviso.email }}</td>
                         <td>{{ aviso.fotos|length }}</td>
                     </tr>
@@ -46,10 +51,10 @@
     </div>
 
     <!-- Paginación -->
-    <div style="margin-top: 20px; text-align: center;">
+    <div class="pagination">
         {% if page > 1 %}
             <a href="{{ url_for('listado', page=page-1) }}">
-                <button>Anterior</button>
+                <button class="btn-page">⬅</button>
             </a>
         {% endif %}
 
@@ -57,7 +62,7 @@
 
         {% if (page * per_page) < total %}
             <a href="{{ url_for('listado', page=page+1) }}">
-                <button>Siguiente</button>
+                <button class="btn-page">➡</button>
             </a>
         {% endif %}
     </div>

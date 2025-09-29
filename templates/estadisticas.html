@@ -4,26 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Estadísticas</title>
-    <link rel="stylesheet" href="../css/stadistic.css">
-
-    <link rel="icon" href="https://http.dog/202.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stadistic.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
 </head>
 
 <body>
+    <div class="header">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
+</div>
     <h1>Estadísticas</h1>
     <div class="galeria">
         <div class="card">
-            <img src="../data/graphs/line.png" alt="Avisos por dia">
+            <img src="{{ url_for('static', filename='graphs/line.png') }}" alt="Avisos por día">
         </div>
         <div class="card">
-            <img src="../data/graphs/circle.png" alt="Relación avisos de gatos y perros">
+            <img src="{{ url_for('static', filename='graphs/circle.png') }}" alt="Relación avisos de gatos y perros">
         </div>
         <div class="card">
-            <img src="../data/graphs/barras.png" alt="Avisos por mes">
+            <img src="{{ url_for('static', filename='graphs/barras.png') }}" alt="Avisos por mes">
         </div>
     </div>
     <div class="volver">
-        <a href="index.html" class="btn-volver">Volver a la página principal</a>
+        <a href="{{ url_for('index') }}" class="btn-volver">Volver a la página principal</a>
     </div>
 </body>
 
