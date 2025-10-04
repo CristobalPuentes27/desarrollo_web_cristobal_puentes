@@ -161,6 +161,11 @@ def crear_aviso():
 
             # Fotos
             fotos = request.files.getlist("foto[]")
+            if len(fotos) == 0 or all(f.filename == "" for f in fotos):
+                errores.append("Debe subir al menos una foto.")
+            if len(fotos) > 5:
+                errores.append("No puede subir más de 5 fotos.")
+            
             for f in fotos:
                 if f and f.filename:
                     if not allowed_file(f.filename):

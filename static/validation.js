@@ -3,23 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const contactarPor = document.getElementById("contactarPor");
     const extraContactos = document.getElementById("extraContactos");
     const fechaEntrega = document.getElementById("fechaEntrega");
+    
+    const contenedorFotos = document.getElementById("contenedorFotos");
 
     // fecha actual + 3 horas
     const ahora = new Date();
-    ahora.setHours(ahora.getHours() + 3);
+    ahora.setHours(ahora.getHours());
 
-    // Formatear a "YYYY-MM-DDTHH:MM" para datetime-local(no funciona)
-    function toDatetimeLocal(fecha) {
-        const year = fecha.getFullYear();
-        const month = String(fecha.getMonth() + 1).padStart(2, '0');
-        const day = String(fecha.getDate()).padStart(2, '0');
-        const hours = String(fecha.getHours()).padStart(2, '0');
-        const minutes = String(fecha.getMinutes()).padStart(2, '0');
 
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
-    }
-
-    const fechaMinima = toDatetimeLocal(ahora);
+    const fechaMinima = ahora.toISOString().slice(0, 16);
     fechaEntrega.value = fechaMinima;
     fechaEntrega.min = fechaMinima;
 
@@ -115,6 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const unidadEdad = document.getElementById("unidadEdad").value;
         if (isNaN(edad) || edad < 1 || unidadEdad === "") {
             errores.push("Debe ingresar una edad válida y seleccionar la unidad.");
+        }
+        const fotos = contenedorFotos.querySelectorAll("input[type='file']");
+        let algunaSeleccionada = false;
+        fotos.forEach(f => {
+            if (f.files.length > 0) algunaSeleccionada = true;
+        });
+        if (!algunaSeleccionada) {
+            errores.push("Debe subir al menos una foto de la mascota.");
         }
 
         // Fecha de entrega

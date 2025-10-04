@@ -4,16 +4,15 @@ Entrega de la **tarea 2**
 
 # Uso
 
-Primero borrar /myenv y cualquier carpeta pycache
+Primero crea un ambiente de python
 
 Correr todas las queries de tarea2.sql luego las de region-comuna.sql
 Correr
 
     `pip install -r requirements.txt`
     
-    `python \database\db.py`
 
-finalmente ejecutar app.py y hacer     
+finalmente hacer     
     
     `flask run `
 

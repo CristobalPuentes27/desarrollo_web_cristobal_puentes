@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+
         const nuevoInput = document.createElement("input");
         nuevoInput.type = "file";
         nuevoInput.name = "foto[]";

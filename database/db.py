@@ -54,7 +54,7 @@ class AvisoAdopcion(Base):
     tipo = Column(Enum("gato", "perro"), nullable=False)
     cantidad = Column(Integer, nullable=False)
     edad = Column(Integer, nullable=False)
-    unidad_medida = Column(Enum("a", "m"), nullable=False)  # a = años, m = meses
+    unidad_medida = Column(Enum("a", "m"), nullable=False)  
     fecha_entrega = Column(DateTime, nullable=False)
     descripcion = Column(Text)
 
