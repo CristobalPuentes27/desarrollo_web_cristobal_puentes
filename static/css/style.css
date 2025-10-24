@@ -336,3 +336,155 @@ a.btn:hover {
     text-align: center;
     margin-top: 20px;
 }
+/* Estilos para la sección de comentarios */
+
+.comentarios-container {
+    max-width: 1000px;
+    margin: 32px auto;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.comentarios-container h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 12px;
+}
+
+/* Formulario de comentarios */
+.comentario-form {
+    margin-bottom: 32px;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.comentario-form h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.comentario-form .form-group {
+    margin-bottom: 16px;
+}
+
+.comentario-form label {
+    display: block;
+    min-width: auto;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #2c3e50;
+}
+
+.comentario-form input,
+.comentario-form textarea {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 4px;
+}
+
+.comentario-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Mensajes de error */
+.error-message {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 4px;
+}
+
+/* Lista de comentarios */
+.lista-comentarios {
+    margin-top: 24px;
+}
+
+.comentario-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: box-shadow 0.2s;
+}
+
+.comentario-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.comentario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.comentario-header strong {
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+.comentario-fecha {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.comentario-texto {
+    color: #495057;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Estado cuando no hay comentarios */
+.lista-comentarios p {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px dashed #dee2e6;
+}
+/* ===== NOTIFICACIONES ===== */
+.notificacion {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #27ae60;
+    color: white;
+    padding: 16px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10000;
+    max-width: 300px;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.notificacion.mostrar {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notificacion.error {
+    background: #e74c3c;
+}
+
+.notificacion.info {
+    background: #3498db;
+}
