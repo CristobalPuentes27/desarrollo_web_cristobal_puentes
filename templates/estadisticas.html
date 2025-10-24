@@ -1,33 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>Estadísticas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='stadistic.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stadistic.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
+    <style>
+      /* pequeños ajustes para que los charts se vean bien */
+      .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      @media(min-width: 900px) {
+        .charts-grid { grid-template-columns: 1fr 1fr; }
+        /* haré que el chart-line ocupe las 2 columnas en pantallas grandes */
+        #chart-line { grid-column: 1 / -1; height: 380px; }
+      }
+      #chart-line, #chart-pie, #chart-column {
+        background: white;
+        border-radius: 8px;
+        padding: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        height: 320px; /* default height */
+      }
+      .volver { text-align: center; margin: 1.5rem 0; }
+    </style>
 </head>
 
 <body>
     <div class="header">
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
     </div>
+
     <h1>Estadísticas</h1>
-    <div class="galeria">
-        <div class="card">
-            <img src="{{ url_for('static', filename='graphs/line.png') }}" alt="Avisos por día">
-        </div>
-        <div class="card">
-            <img src="{{ url_for('static', filename='graphs/circle.png') }}" alt="Relación avisos de gatos y perros">
-        </div>
-        <div class="card">
-            <img src="{{ url_for('static', filename='graphs/barras.png') }}" alt="Avisos por mes">
-        </div>
+
+    <div class="charts-grid">
+        <div id="chart-line" aria-label="Avisos por día - gráfico de líneas"></div>
+        <div id="chart-pie" aria-label="Relación avisos por tipo - gráfico de torta"></div>
+        <div id="chart-column" aria-label="Avisos por mes - gráfico de barras"></div>
     </div>
+
     <div class="volver">
         <a href="{{ url_for('index') }}" class="btn-volver">Volver a la página principal</a>
     </div>
-</body>
 
+    <!-- Highcharts CDN -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- (opcional) módulo de exportación -->
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+    <!-- Nuestro JS que hace fetch y dibuja los charts -->
+    <script src="{{ url_for('static', filename='js/estadisticas.js') }}"></script>
+</body>
 </html>

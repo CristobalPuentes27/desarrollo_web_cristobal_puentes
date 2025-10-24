@@ -20,6 +20,17 @@ SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
 # --- MODELOS ---
+class Comentario(Base):
+    __tablename__ = "comentario"
+    
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String(80), nullable=False)
+    texto = Column(String(300), nullable=False)  # Veo que en tu DB es VARCHAR(300)
+    fecha = Column(DateTime, default=datetime.now, nullable=False)
+    aviso_id = Column(Integer, ForeignKey('aviso_adopcion.id'), nullable=False)
+    
+    # Relación
+    aviso = relationship("AvisoAdopcion", back_populates="comentarios")
 
 class Region(Base):
     __tablename__ = "region"
@@ -45,7 +56,7 @@ class AvisoAdopcion(Base):
     __tablename__ = "aviso_adopcion"
 
     id = Column(Integer, primary_key=True)
-    fecha_ingreso = Column(DateTime, nullable=False, default=datetime.utcnow)
+    fecha_ingreso = Column(DateTime, nullable=False, default=datetime.now)
     comuna_id = Column(Integer, ForeignKey("comuna.id"), nullable=False)
     sector = Column(String(100))
     nombre = Column(String(200), nullable=False)
@@ -61,6 +72,7 @@ class AvisoAdopcion(Base):
     comuna = relationship("Comuna", back_populates="avisos")
     fotos = relationship("Foto", back_populates="aviso", cascade="all, delete-orphan")
     contactos = relationship("ContactarPor", back_populates="aviso", cascade="all, delete-orphan")
+    comentarios = relationship("Comentario", back_populates="aviso", cascade="all, delete-orphan")
     @property
     def edad_txt(self):
         if self.unidad_medida == "a":

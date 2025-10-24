@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <title>Detalle Aviso</title>
     <link rel="icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='photo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/photo.css') }}">
 </head>
 
 <body>
@@ -112,6 +112,44 @@
             document.getElementById("modal").style.display = "none";
         });
     </script>
-</body>
+<!-- SECCIÓN COMENTARIOS - AGREGAR ESTO ANTES DEL </body> -->
+<div class="comentarios-container">
+    <h2>Comentarios</h2>
+    
+    <!-- Formulario para nuevo comentario -->
+    <form id="form-comentario" class="comentario-form">
+        <h3>Agregar Comentario</h3>
+        
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" 
+                   minlength="3" maxlength="80" required>
+            <small id="error-nombre" class="error-message"></small>
+        </div>
+        
+        <div class="form-group">
+            <label for="texto">Comentario:</label>
+            <textarea id="texto" name="texto" rows="4" cols="50"
+                     minlength="5" required></textarea>
+            <small id="error-texto" class="error-message"></small>
+        </div>
+        
+        <button type="submit" class="btn">Agregar comentario</button>
+    </form>
+    
+    <!-- Lista de comentarios -->
+    <div id="lista-comentarios" class="lista-comentarios">
+        <!-- Los comentarios se cargarán aquí via AJAX -->
+    </div>
+</div>
 
-</html>
+<!-- Incluir el archivo JavaScript separado -->
+<script src="{{ url_for('static', filename='js/comentarios.js') }}"></script>
+<script>
+    // Pasar el avisoId al script
+    const avisoId = {{ aviso.id }};
+</script>
+    </div>
+</div>
+
+</script>
