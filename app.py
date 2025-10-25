@@ -240,13 +240,12 @@ def api_estadisticas():
     try:
         # Obtener todos los registros reales
         rows = session.query(AvisoAdopcion.fecha_ingreso, AvisoAdopcion.tipo).all()
-        print(f"📊 Registros reales encontrados: {len(rows)}")
+        print(f"Registros reales encontrados: {len(rows)}")
 
-        # ✅ Encontrar la fecha más antigua en la base de datos real
         fecha_mas_antigua = None
         for fecha_ingreso, tipo in rows:
             if fecha_ingreso:
-                # Convertir a date (ya sabemos el formato de la BD)
+                
                 if isinstance(fecha_ingreso, datetime):
                     fecha_date = fecha_ingreso.date()
                 else:
@@ -259,11 +258,11 @@ def api_estadisticas():
         # Si no hay fechas en la BD, usar fecha por defecto (hace 30 días)
         if fecha_mas_antigua is None:
             fecha_mas_antigua = datetime.now().date() - timedelta(days=30)
-            print(f"📅 No se encontraron fechas, usando por defecto: {fecha_mas_antigua}")
+            print(f"No se encontraron fechas, usando por defecto: {fecha_mas_antigua}")
         else:
-            print(f"📅 Fecha más antigua en BD: {fecha_mas_antigua}")
+            print(f"Fecha más antigua en BD: {fecha_mas_antigua}")
 
-        # ✅ Generar datos fake para fechas ANTERIORES a la fecha más antigua
+        # Generar datos fake para fechas ANTERIORES a la fecha más antigua
         if len(rows) < 100:
             # Generar datos de los últimos 180 días antes de la fecha más antigua
             dias_para_atras = 180
@@ -276,7 +275,7 @@ def api_estadisticas():
                 fecha_fin=fecha_mas_antigua
             )
             rows += fake_data
-            print(f"⚙️ Se agregaron {len(fake_data)} datos falsos desde {fecha_inicio_fake} hasta {fecha_mas_antigua}")
+            print(f"Se agregaron {len(fake_data)} datos falsos desde {fecha_inicio_fake} hasta {fecha_mas_antigua}")
 
         # Procesar datos (real + fake)
         by_day = defaultdict(int)
@@ -287,7 +286,7 @@ def api_estadisticas():
             if not fecha_ingreso:
                 continue
 
-            # Convertir a date (formato conocido de la BD)
+            
             if isinstance(fecha_ingreso, datetime):
                 dt = fecha_ingreso.date()
             else:
@@ -319,11 +318,11 @@ def api_estadisticas():
             }
         }
 
-        print(f"✅ Datos procesados: {len(days_list)} días, {pie} tipos, {len(months)} meses")
+        print(f"Datos procesados: {len(days_list)} días, {pie} tipos, {len(months)} meses")
         return jsonify(result)
         
     except Exception as e:
-        print(f"❌ Error en api_estadisticas: {str(e)}")
+        print(f"Error en api_estadisticas: {str(e)}")
         return jsonify({"error": "Error interno del servidor"}), 500
     finally:
         session.close()
@@ -336,26 +335,26 @@ def generar_datos_fake_para_estadisticas(n=120, fecha_inicio=None, fecha_fin=Non
     data = []
     tipos = ["gato", "perro"]
     
-    # Valores por defecto
+    
     if fecha_inicio is None:
         fecha_inicio = datetime.now().date() - timedelta(days=180)
     if fecha_fin is None:
         fecha_fin = datetime.now().date()
     
-    # Calcular rango de días
+    
     dias_rango = (fecha_fin - fecha_inicio).days
     if dias_rango <= 0:
         dias_rango = 180
         fecha_inicio = fecha_fin - timedelta(days=dias_rango)
     
-    print(f"📊 Generando {n} datos fake desde {fecha_inicio} hasta {fecha_fin}")
+    print(f"Generando {n} datos fake desde {fecha_inicio} hasta {fecha_fin}")
     
     for _ in range(n):
-        # Generar fecha aleatoria dentro del rango (excluyendo fecha_fin)
+
         dias_aleatorios = random.randint(0, dias_rango - 1)
         fecha_fake = fecha_inicio + timedelta(days=dias_aleatorios)
         
-        # Convertir a datetime para consistencia con datos reales
+        
         fecha_fake_dt = datetime.combine(fecha_fake, datetime.min.time())
         tipo = random.choice(tipos)
         data.append((fecha_fake_dt, tipo))
@@ -410,28 +409,28 @@ def agregar_comentario(aviso_id):
         nombre = data.get('nombre', '').strip()
         texto = data.get('texto', '').strip()
         
-        # Validaciones de seguridad
+        
         errores = []
         
-        # 1. Validar longitud
+        
         if len(nombre) < 3 or len(nombre) > 80:
             errores.append('El nombre debe tener entre 3 y 80 caracteres')
         
         if len(texto) < 5:
             errores.append('El comentario debe tener al menos 5 caracteres')
         
-        # 2. Validar caracteres permitidos en nombre (solo letras, números, espacios y algunos caracteres básicos)
+        
         if not re.match(r'^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-\'\.\,\(\)]{3,80}$', nombre):
             errores.append('El nombre contiene caracteres no permitidos')
         
-        # 3. Validar que no sea solo espacios
+        
         if nombre.replace(' ', '').replace('\t', '') == '':
             errores.append('El nombre no puede estar vacío')
         
         if texto.replace(' ', '').replace('\t', '').replace('\n', '').replace('\r', '') == '':
             errores.append('El comentario no puede estar vacío')
         
-        # 4. Detectar posibles scripts o código malicioso
+        
         patrones_maliciosos = [
             r'<script.*?>.*?</script>',  # Etiquetas script
             r'javascript:',              # Protocolo javascript
@@ -455,7 +454,6 @@ def agregar_comentario(aviso_id):
                 errores.append('El comentario contiene código no permitido')
                 break
         
-        # 5. Limitar longitud máxima real (prevenir ataques de gran tamaño)
         if len(nombre) > 80:
             errores.append('El nombre es demasiado largo')
         if len(texto) > 1000:  # Más generoso que el límite de la DB
@@ -464,11 +462,11 @@ def agregar_comentario(aviso_id):
         if errores:
             return jsonify({'success': False, 'errores': errores}), 400
         
-        # 6. Sanitizar datos antes de guardar (escape HTML)
+       
         nombre_seguro = escape(nombre)
         texto_seguro = escape(texto)
         
-        # 7. Limpiar espacios extras
+        
         nombre_seguro = re.sub(r'\s+', ' ', nombre_seguro.strip())
         texto_seguro = re.sub(r'\n\s*\n', '\n\n', texto_seguro.strip())
         
