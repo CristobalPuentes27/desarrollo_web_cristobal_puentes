@@ -4,9 +4,9 @@ Entrega de la **tarea 2**
 
 # Uso
 
-Primero crea un ambiente de python
+Primero borrar todo los archivos temporales como el ambiente  de python o las fotos guardadas, luego crea un ambiente de python
 
-Correr todas las queries de tarea2.sql luego las de region-comuna.sql y tabla-comentario.sql
+Correr todas las queries de tarea2.sql luego las de region-comuna.sql y tabla-comentario.sql y tabla-nota.sql
 
 
 Correr
