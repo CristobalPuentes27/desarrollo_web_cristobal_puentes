@@ -1,0 +1,122 @@
+.container {
+    max-width: 1400px;
+    margin: 10px auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.error-message {
+    color: #e74c3c;
+    text-align: center;
+    padding: 20px;
+    background: #fdf2f2;
+    border: 1px solid #e74c3c;
+    border-radius: 6px;
+    margin: 20px 0;
+}
+
+.btn-evaluar {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: left;
+    transition: background 0.2s;
+}
+
+.btn-evaluar:hover {
+    background-color: #34495e;
+}
+
+.nota-display {
+    font-weight: bold;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 8px;
+    width: 350px;
+    text-align: center;
+    border: 2px solid #2c3e50;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.nota-btn {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    margin: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 50px;
+    transition: background 0.2s;
+}
+
+.nota-btn:hover {
+    background-color: #34495e;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close:hover {
+    color: #2c3e50;
+}
+
+.mensaje-modal {
+    color: #e74c3c;
+    margin-top: 12px;
+    font-size: 14px;
+}
+.nav-buttons {
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-volver {
+    background-color: #7f8c8d;
+    color: #ecf0f1;
+}
+
+.btn-volver:hover {
+    background-color: #95a5a6;
+}

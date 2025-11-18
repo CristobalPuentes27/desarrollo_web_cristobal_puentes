@@ -497,3 +497,6 @@ def agregar_comentario(aviso_id):
         return jsonify({'success': False, 'errores': ['Error interno del servidor']}), 500
     finally:
         session.close()
+@app.route('/evaluaciones')
+def evaluaciones():
+    return render_template('evaluaciones.html')

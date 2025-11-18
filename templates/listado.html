@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Listado de Avisos de Adopción</title>
     <link rel="icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -14,6 +13,13 @@
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
     </div>
     <h1>Listado de Avisos de Adopción</h1>
+
+    <!-- NUEVO: Enlace a la página de evaluaciones -->
+    <div style="text-align: center; margin: 20px 0;">
+        <a href="{{ url_for('evaluaciones') }}" class="btn" style="background-color: #27ae60;">
+            📊 Ir a Evaluaciones de Avisos
+        </a>
+    </div>
 
     <div id="tabla-container">
         <table class="table-large">

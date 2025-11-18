@@ -15,11 +15,15 @@ Correr
     
 
 
-finalmente hacer     
+ hacer     
     
     flask run 
 
 esto abrira la pagina mostrando el lobby de la web (el template index.html)
+
+por otra parte, para mostrar lo relevante a esta entrega antes de ingresar a la pagina ademas se debe ejecutar el archivo de la carpeta notas /notas
+
+` NotasApplication.java `
 
 # Formato
 
@@ -44,8 +48,8 @@ esto abrira la pagina mostrando el lobby de la web (el template index.html)
 
 # Sobre la entrega actual
 
-**Graficos:**
+**Notas:**
 
-- Generan datos aleatoreos en un periodo de tres meses hacia atras si no hay suficiente informacion en la base de datos, mezclando los dos tipos de datos
+- ve a todos los animales (ruta /listado) y ahi aparecera un boton para ir a la pagina donde se puede votar
 
-- Como no hay un login, cualquiera puede comentar las veces que quiera, puse en app.py un detector de patrones para que no hagan un ingreso de texto malisioso, realmente nose bien si funciona
+
