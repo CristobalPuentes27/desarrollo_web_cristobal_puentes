@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Adoption</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/photo.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
+    </div>
+    <h1><b>Pet Adoption:</b> busca tu nueva mascota </h1>
+
+    <ul class="navbar">
+        <li><a href="{{ url_for('crear_aviso') }}">Poner en adopción</a></li>
+        <li><a href="{{ url_for('listado') }}">Todos los animales</a></li>
+        <li><a href="{{ url_for('estadisticas') }}">Estadísticas</a></li>
+    </ul>
+
+    <h2>Bienvenido a Pet Adoption</h2>
+    <h3>Últimas publicaciones:</h3>
+
+    <table style="width:100%">
+        <tr>
+            <th>Fecha Publicación</th>
+            <th>Comuna</th>
+            <th>Sector</th>
+            <th>Cantidad Tipo / Edad</th>
+            <th>Foto</th>
+        </tr>
+        {% if avisos %}
+        {% for aviso in avisos %}
+        <tr onclick="window.location.href='{{ url_for('detalle', aviso_id=aviso.id) }}'" style="cursor:pointer;">
+            <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ aviso.comuna.nombre }}</td>
+            <td>{{ aviso.sector }}</td>
+            <td>{{ aviso.cantidad }} {{ aviso.tipo }} / {{ aviso.edad_txt }}</td>
+            <td>
+                {% if aviso.fotos %}
+                <img src="{{ url_for('static', filename=aviso.fotos[0].ruta_archivo) }}" alt="foto mascota" width="100"
+                    height="80">
+                {% else %}
+                <span>Sin foto</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="5">No hay publicaciones aún</td>
+        </tr>
+        {% endif %}
+    </table>
+</body>
+
+</html>

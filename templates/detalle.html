@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Aviso</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/photo.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
+    </div>
+    <h1>Detalle Aviso de Adopción</h1>
+
+    <div class="detalle">
+        <table class="detalle-table">
+            <tr>
+                <th>Fecha Publicación</th>
+                <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            <tr>
+                <th>Fecha Entrega</th>
+                <td>{{ aviso.fecha_entrega.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            <tr>
+                <th>Comuna</th>
+                <td>{{ aviso.comuna.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Sector</th>
+                <td>{{ aviso.sector or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>{{ aviso.cantidad }}</td>
+            </tr>
+            <tr>
+                <th>Tipo</th>
+                <td>{{ aviso.tipo }}</td>
+            </tr>
+            <tr>
+                <th>Edad</th>
+                <td>{{ aviso.edad_txt }}</td>
+            </tr>
+            <tr>
+                <th>Nombre Contacto</th>
+                <td>{{ aviso.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ aviso.email }}</td>
+            </tr>
+            <tr>
+                <th>Celular</th>
+                <td>{{ aviso.celular or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Descripción</th>
+                <td>{{ aviso.descripcion or 'Sin descripción' }}</td>
+            </tr>
+            <tr>
+                <th>Contactos adicionales</th>
+                <td>
+                    {% if aviso.contactos %}
+                    <ul>
+                        {% for c in aviso.contactos %}
+                        <li><strong>{{ c.nombre }}:</strong> {{ c.identificador }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Total Fotos</th>
+                <td>{{ aviso.fotos|length }}</td>
+            </tr>
+        </table>
+
+        <div class="fotos">
+            {% for foto in aviso.fotos %}
+            <img src="{{ url_for('static', filename=foto.ruta_archivo) }}" alt="{{ foto.nombre_archivo }}" width="320"
+                height="240" onclick="abrirModal('{{ url_for('static', filename=foto.ruta_archivo) }}')">
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <br>
+    <div style="text-align:center;">
+        <a href="{{ url_for('listado') }}" class="btn">Volver al listado</a>
+        <a href="{{ url_for('index') }}" class="btn">Volver a la portada</a>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal">
+        <span id="cerrarModal">&times;</span>
+        <img id="imagenModal" src="/static/icon.jpg" alt="Foto grande" width="800" height="600">
+    </div>
+
+    <script>
+        function abrirModal(src) {
+            document.getElementById("imagenModal").src = src;
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        document.getElementById("cerrarModal").addEventListener("click", () => {
+            document.getElementById("modal").style.display = "none";
+        });
+    </script>
+<!-- SECCIÓN COMENTARIOS - AGREGAR ESTO ANTES DEL </body> -->
+<div class="comentarios-container">
+    <h2>Comentarios</h2>
+    
+    <!-- Formulario para nuevo comentario -->
+    <form id="form-comentario" class="comentario-form">
+        <h3>Agregar Comentario</h3>
+        
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" 
+                   minlength="3" maxlength="80" required>
+            <small id="error-nombre" class="error-message"></small>
+        </div>
+        
+        <div class="form-group">
+            <label for="texto">Comentario:</label>
+            <textarea id="texto" name="texto" rows="4" cols="50"
+                     minlength="5" required></textarea>
+            <small id="error-texto" class="error-message"></small>
+        </div>
+        
+        <button type="submit" class="btn">Agregar comentario</button>
+    </form>
+    
+    <!-- Lista de comentarios -->
+    <div id="lista-comentarios" class="lista-comentarios">
+        <!-- Los comentarios se cargarán aquí via AJAX -->
+    </div>
+</div>
+
+<!-- Incluir el archivo JavaScript separado -->
+<script src="{{ url_for('static', filename='js/comentarios.js') }}"></script>
+<script>
+    // Pasar el avisoId al script
+    const avisoId = {{ aviso.id }};
+</script>
+</html>

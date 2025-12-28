@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Avisos de Adopción</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/eva.css') }}">
+</head>
+<body>
+    <!-- Header con logo -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Pet Adoption">
+    </div>
+
+    <div class="container">
+        <h1>📋 Evaluación de Avisos de Adopción</h1>
+
+        <!-- NUEVO: Botones de navegación -->
+        <div class="nav-buttons">
+            <a href="{{ url_for('listado') }}" class="btn">
+                📄 Ver Listado Completo
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-volver">
+                🏠 Volver a Portada
+            </a>
+        </div>
+        
+        <div id="loading" class="loading">
+            Cargando avisos...
+        </div>
+        
+        <div id="error-message" class="error-message" style="display: none;">
+            Error al cargar los avisos. Intenta recargar la página.
+        </div>
+        
+        <table id="tabla-avisos" style="display: none;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha publicación</th>
+                    <th>Sector</th>
+                    <th>Cantidad</th>
+                    <th>Tipo</th>
+                    <th>Edad</th>
+                    <th>Comuna</th>
+                    <th>Nota</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="avisos-body">
+                <!-- Los avisos se cargarán aquí dinámicamente -->
+            </tbody>
+        </table>
+
+        <!-- Botón adicional al final -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ url_for('index') }}" class="btn btn-volver">
+                🏠 Volver a Portada
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal para seleccionar nota -->
+    <div id="modal-evaluacion" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Evaluar Aviso</h3>
+            <p>Selecciona una nota para este aviso:</p>
+            <div id="botones-nota">
+                <!-- Los botones de nota se generarán dinámicamente -->
+            </div>
+            <p id="mensaje-modal" class="mensaje-modal" style="display: none;"></p>
+        </div>
+    </div>
+
+    <!-- Notificación flotante -->
+    <div id="notificacion" class="notificacion" style="display: none;"></div>
+
+    <script>
+        // URL base de Spring Boot
+        const SPRING_API_BASE = 'http://localhost:8081/api/evaluaciones';
+        let avisoActualId = null;
+
+        // Elementos DOM
+        const loadingElement = document.getElementById('loading');
+        const errorElement = document.getElementById('error-message');
+        const tablaElement = document.getElementById('tabla-avisos');
+        const avisosBody = document.getElementById('avisos-body');
+        const modal = document.getElementById('modal-evaluacion');
+        const botonesNota = document.getElementById('botones-nota');
+        const mensajeModal = document.getElementById('mensaje-modal');
+        const closeBtn = document.querySelector('.close');
+        const notificacion = document.getElementById('notificacion');
+
+        // Cargar avisos al iniciar la página
+        document.addEventListener('DOMContentLoaded', cargarAvisos);
+
+        // Event listeners para el modal
+        closeBtn.onclick = () => cerrarModal();
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        };
+
+        // Función para mostrar notificación
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            notificacion.textContent = mensaje;
+            notificacion.className = `notificacion ${tipo}`;
+            notificacion.style.display = 'block';
+            
+            setTimeout(() => {
+                notificacion.classList.add('mostrar');
+            }, 100);
+
+            setTimeout(() => {
+                notificacion.classList.remove('mostrar');
+                setTimeout(() => {
+                    notificacion.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
+
+        // Función para cerrar modal
+        function cerrarModal() {
+            modal.style.display = 'none';
+            mensajeModal.style.display = 'none';
+        }
+
+        // Función para cargar los avisos desde Spring Boot
+        async function cargarAvisos() {
+            try {
+                const response = await fetch(`${SPRING_API_BASE}/avisos`);
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                
+                const avisos = await response.json();
+                mostrarAvisos(avisos);
+                
+            } catch (error) {
+                console.error('Error al cargar avisos:', error);
+                mostrarError('Error al cargar los avisos. Intenta recargar la página.');
+            }
+        }
+
+        // Función para mostrar los avisos en la tabla
+        function mostrarAvisos(avisos) {
+            loadingElement.style.display = 'none';
+            
+            if (avisos.length === 0) {
+                errorElement.textContent = 'No hay avisos disponibles para evaluar.';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            avisosBody.innerHTML = '';
+            
+            avisos.forEach(aviso => {
+                const fila = document.createElement('tr');
+                
+                // Formatear fecha
+                const fecha = new Date(aviso.fechaPublicacion).toLocaleDateString('es-CL');
+                
+                // Determinar unidad de edad
+                const unidadEdad = aviso.unidadMedida === 'a' ? 'años' : 'meses';
+                
+                fila.innerHTML = `
+                    <td>${aviso.id}</td>
+                    <td>${fecha}</td>
+                    <td>${aviso.sector || '-'}</td>
+                    <td>${aviso.cantidad}</td>
+                    <td>${aviso.tipo}</td>
+                    <td>${aviso.edad} ${unidadEdad}</td>
+                    <td>${aviso.comuna}</td>
+                    <td class="nota-display" id="nota-${aviso.id}">${aviso.notaDisplay}</td>
+                    <td>
+                        <button class="btn-evaluar" onclick="abrirModal(${aviso.id})">Ptj
+                        </button>
+                    </td>
+                `;
+                
+                avisosBody.appendChild(fila);
+            });
+            
+            tablaElement.style.display = 'table';
+        }
+
+        // Función para mostrar error
+        function mostrarError(mensaje) {
+            loadingElement.style.display = 'none';
+            errorElement.textContent = mensaje;
+            errorElement.style.display = 'block';
+        }
+
+        // Función para abrir el modal de evaluación
+        function abrirModal(avisoId) {
+            avisoActualId = avisoId;
+            mensajeModal.style.display = 'none';
+            
+            // Generar botones de nota (1-7)
+            botonesNota.innerHTML = '';
+            for (let nota = 1; nota <= 7; nota++) {
+                const boton = document.createElement('button');
+                boton.className = 'nota-btn';
+                boton.textContent = nota;
+                boton.onclick = () => enviarEvaluacion(nota);
+                botonesNota.appendChild(boton);
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        // Función para enviar la evaluación
+        async function enviarEvaluacion(nota) {
+            try {
+                mensajeModal.style.display = 'none';
+                
+                const requestData = {
+                    avisoId: avisoActualId,
+                    nota: nota
+                };
+                
+                const response = await fetch(`${SPRING_API_BASE}/evaluar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                const resultado = await response.json();
+                
+                if (resultado.success) {
+                    // Actualizar la nota en la tabla
+                    const notaElement = document.getElementById(`nota-${avisoActualId}`);
+                    const nuevoPromedio = resultado.nuevoPromedio !== null ? 
+                        Math.round(resultado.nuevoPromedio * 10) / 10 : '-';
+                    notaElement.textContent = nuevoPromedio;
+                    
+                    // Cerrar modal
+                    cerrarModal();
+                    
+                    // Mostrar notificación de éxito
+                    mostrarNotificacion('✅ Evaluación enviada exitosamente!', 'info');
+                    
+                } else {
+                    mensajeModal.textContent = resultado.message || 'Error al enviar la evaluación';
+                    mensajeModal.style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Error al enviar evaluación:', error);
+                mensajeModal.textContent = 'Error de conexión. Intenta nuevamente.';
+                mensajeModal.style.display = 'block';
+            }
+        }
+
+        // Recargar avisos cada 30 segundos para mantener datos actualizados
+        setInterval(cargarAvisos, 30000);
+    </script>
+</body>
+</html>

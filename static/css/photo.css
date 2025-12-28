@@ -1,0 +1,85 @@
+/* ===== LISTADO DE AVISOS ===== */
+#tabla-container, #detalle-container {
+    max-width: 1000px;
+    margin: 32px auto;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* Hover sobre las filas */
+table tbody tr:hover {
+    background-color: #eaf2f8;
+    cursor: pointer;
+}
+
+/* ===== DETALLE DEL AVISO ===== */
+#detalle-container h2 {
+    color: #2c3e50;
+    margin-bottom: 16px;
+}
+
+#detalle-container p {
+    margin: 6px 0;
+    color: #333;
+    font-size: 15px;
+}
+
+/* Contenedor de fotos pequeñas */
+.fotos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.fotos img {
+    width: 320px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.fotos img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ===== MODAL ===== */
+#modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#modal img {
+    width: 800px;
+    height: 600px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+#cerrarModal {
+    position: absolute;
+    top: 20px; right: 30px;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#cerrarModal:hover {
+    color: #ddd;
+}
