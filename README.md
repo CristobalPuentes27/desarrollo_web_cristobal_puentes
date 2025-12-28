@@ -1,7 +1,6 @@
 # Desarrollo de Aplicaciones Web
 
-Entrega de la **tarea 2**
-
+**Version final**
 # Uso
 
 Primero borrar todo los archivos temporales como el ambiente  de python o las fotos guardadas, luego crea un ambiente de python
@@ -45,11 +44,5 @@ por otra parte, para mostrar lo relevante a esta entrega antes de ingresar a la 
 > > archivo js
 
 > templates (archivos modificados de los html originales)
-
-# Sobre la entrega actual
-
-**Notas:**
-
-- ve a todos los animales (ruta /listado) y ahi aparecera un boton para ir a la pagina donde se puede votar
 
 
